@@ -3,12 +3,17 @@
 var app = require('app'),
     BrowserWindow = require('browser-window'),
     Tray = require('tray'),
-    path = require('path');
+    path = require('path'),
+    ipc = require('ipc'),
+    Menu = require('menu');
 
 require('crash-reporter').start();
 
 var mainWindow = null;
 var tray = null;
+
+var iconIdle = path.join(__dirname, 'iconIdle.png');
+var iconActive = path.join(__dirname, 'iconActive.png');
 
 app.on('window-all-closed', function() {
     if (process.platform !== 'darwin') {
@@ -21,7 +26,8 @@ app.on('ready', function() {
         app.dock.hide();
     }
 
-    tray = new Tray(path.join(__dirname, 'icon.png'));
+
+    tray = new Tray(iconIdle);
 
     tray.on('clicked', function clicked() {
         if(mainWindow && mainWindow.isVisible()){
@@ -37,27 +43,37 @@ app.on('ready', function() {
 
         var atomScreen = require('screen'),
             size = atomScreen.getPrimaryDisplay(),
-            x = size.workArea.width - 500 - 250,
+            x = size.workArea.width - 1000 - 250,
             y = size.workArea.y
 
         mainWindow = new BrowserWindow({
-            width: 500, 
-            height: 400,
+            width: 1200, 
+            height: 600,
             show: true,
-            frame: false
+            frame: true
         });
         mainWindow.setPosition(x, y);
 
         mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
-        mainWindow.on('blur', hide);
+        // mainWindow.on('blur', hide);
 
         mainWindow.on('close', function() {
             mainWindow = null;
         });
+
+
     };
 
     var hide = function(){
         mainWindow.hide();
     };
+
+    ipc.on('newComment', function(event, arg) {
+        console.log("arg", arg)
+        tray.setImage(iconActive);
+    })
 });
+
+
+
