@@ -5,9 +5,6 @@ var path = require('path');
 var shell = require("shell");
 
 var url = "https://secure-wave-3682.herokuapp.com/github";
-var userName = null;
-var nameEntered = false;
-
 var previousUpdateId = null;
 var latestUpdateId = null;
 
@@ -17,13 +14,23 @@ var bells = new Audio(bellUrl);
 
 
 
+setInterval(pollForComments, 2000);
+//Check if name has already been entered
+var userName = localStorage["userName"];
+
+if(userName) {
+    $('#getName').hide();
+    $('#currentUserName').text(userName);
+}
+
 $('#username_button').on('click', function() {
     userName = $("#username_input").val(); 
+    localStorage['userName'] = userName
+    $('#currentUserName').text(userName);
+});
 
-    if(!nameEntered) {
-        nameEntered = true;
-        setInterval(pollForComments, 2000);
-    }
+$('#reset_name_button').on('click', function() {
+    $('#getName').show();
 });
 
 function pollForComments() {
@@ -42,6 +49,7 @@ function update(data) {
         //Nothing new has happened, so return
         return;
     }
+
     if(data.pull_request && data.pull_request.user.login === userName) {
         updateView(data.comment.body, data.comment.html_url);
     }

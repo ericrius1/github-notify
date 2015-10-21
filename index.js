@@ -1,4 +1,5 @@
 //https://developer.github.com/webhooks/
+///usr/local/lib/node_modules/electron-prebuilt/dist
 
 var app = require('app'),
     BrowserWindow = require('browser-window'),

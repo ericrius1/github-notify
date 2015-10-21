@@ -4,12 +4,20 @@
     <title></title>
 </head>
 <body>
-    <div> What's your github name? </div>
-    <input id = "username_input"></input>
-    <button id = "username_button">Submit</button>
-    <h3>Latest Comment: </h3>
-    <div id = "latest_comment">No new comments</div>
-    <a href = "" target = "_blank" id = "link">Blank</a>
+    <form id = "getName">
+        <div> What's your github name? </div>
+        <input id = "username_input"></input>
+        <button id = "username_button">Submit</button>
+    </form>
+    <section>
+        <h3>Latest Comment: </h3>
+        <div id = "latest_comment">No new comments</div>
+        <a href = "" target = "_blank" id = "link">Blank</a>
+    </section>
+    <br>
+    <br>
+    <div id = "currentUserName"></div>
+    <button id = "reset_name_button">reset username</button>
    <script>
    require('./app.js')
    </script>
