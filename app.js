@@ -2,6 +2,8 @@ var $ = require('jquery');
 var ipc = require('ipc');
 var path = require('path');
 
+var shell = require("shell");
+
 var url = "https://secure-wave-3682.herokuapp.com/github";
 var userName = null;
 var nameEntered = false;
@@ -20,40 +22,47 @@ $('#username_button').on('click', function() {
 
     if(!nameEntered) {
         nameEntered = true;
-        setInterval(pollForComments, 5000);
+        setInterval(pollForComments, 2000);
     }
 });
 
 function pollForComments() {
-    console.log('poll');
     $.ajax({
         method: "GET",
         url: url,
         success: function(data) {
-            updateCount(data);
+            update(data);
         }
     });
 }
 
-function updateCount(data) {
+function update(data) {
     latestUpdateId = data.id
-      ipc.send("newComment", "data");
-      bells.currentTime = 0;
-      bells.play();
     if(latestUpdateId === previousUpdateId) {
         //Nothing new has happened, so return
         return;
     }
-    // console.log("success! ", data);
     if(data.pull_request && data.pull_request.user.login === userName) {
-      ipc.send("newComment", "data");
+        updateView(data.comment.body, data.comment.html_url);
     }
 
     if(data.issue && data.issue.user.login === userName) {
+       updateView(data.comment.body, data.comment.html_url);
     }
 
-
     previousUpdateId = latestUpdateId;
+}
+
+function updateView(comment, url) {
+
+    ipc.send("newComment");
+    $('#latest_comment').html(comment);
+    $('#link').attr('href', url);
+    $('#link').text(url);
+    bells.currentTime = 0;
+    bells.play();
+    
+
 }
 
 

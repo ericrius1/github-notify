@@ -30,6 +30,7 @@ app.on('ready', function() {
     tray = new Tray(iconIdle);
 
     tray.on('clicked', function clicked() {
+        tray.setImage(iconIdle);
         if(mainWindow && mainWindow.isVisible()){
             return hide();
         }
@@ -47,8 +48,8 @@ app.on('ready', function() {
             y = size.workArea.y
 
         mainWindow = new BrowserWindow({
-            width: 1200, 
-            height: 600,
+            width: 300, 
+            height: 300,
             show: true,
             frame: true
         });
@@ -70,7 +71,6 @@ app.on('ready', function() {
     };
 
     ipc.on('newComment', function(event, arg) {
-        console.log("arg", arg)
         tray.setImage(iconActive);
     })
 });
