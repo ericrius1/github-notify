@@ -50,6 +50,11 @@ function update(data) {
         return;
     }
 
+    if(data.comment) {
+        
+        updateView(data.comment.body, data.comment.html_url);
+    }
+
     if(data.pull_request && data.pull_request.user.login === userName) {
         updateView(data.comment.body, data.comment.html_url);
     }

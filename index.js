@@ -28,17 +28,18 @@ app.on('ready', function() {
     }
 
 
+
     tray = new Tray(iconIdle);
 
     tray.on('clicked', function clicked() {
         tray.setImage(iconIdle);
-        if(mainWindow && mainWindow.isVisible()){
+        if (mainWindow && mainWindow.isVisible()) {
             return hide();
         }
         show();
     });
 
-    var show = function(){
+    var show = function() {
         if (mainWindow && !mainWindow.isVisible()) {
             return mainWindow.show();
         }
@@ -49,7 +50,7 @@ app.on('ready', function() {
             y = size.workArea.y
 
         mainWindow = new BrowserWindow({
-            width: 300, 
+            width: 300,
             height: 300,
             show: true,
             frame: true
@@ -63,18 +64,17 @@ app.on('ready', function() {
         mainWindow.on('close', function() {
             mainWindow = null;
         });
-
-
     };
 
-    var hide = function(){
+    var hide = function() {
         mainWindow.hide();
     };
+
+
+    show();
+    hide();
 
     ipc.on('newComment', function(event, arg) {
         tray.setImage(iconActive);
     })
 });
-
-
-
